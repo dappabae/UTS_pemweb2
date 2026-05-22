@@ -8,7 +8,7 @@ export default function EventIndex() {
   const handleDelete = async (id: number) => {
     try {
 
-      await fetch(`http://localhost:3000/event/${id}`, {
+      await fetch(`/event/${id}`, {
         method: "DELETE",
       });
 
@@ -23,7 +23,7 @@ export default function EventIndex() {
 
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:3000/event");
+        const response = await fetch("https://back-end-converse-jkmq.vercel.app/event");
 
         const data = await response.json();
 

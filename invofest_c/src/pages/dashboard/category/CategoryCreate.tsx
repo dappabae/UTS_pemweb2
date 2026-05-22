@@ -13,7 +13,7 @@ export default function CategoryCreate() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/category", {
+      const response = await fetch("https://back-end-converse-jkmq.vercel.app/category", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

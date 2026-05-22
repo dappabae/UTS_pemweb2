@@ -8,7 +8,7 @@ export default function Categoryindex() {
   const handleDelete = async (id: number) => {
     try {
 
-      await fetch(`http://localhost:3000/category/${id}`, {
+      await fetch(`https://back-end-converse-jkmq.vercel.app/category/${id}`, {
         method: "DELETE",
       });
 
@@ -24,7 +24,7 @@ export default function Categoryindex() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/category");
+        const response = await fetch("https://back-end-converse-jkmq.vercel.app/category");
 
         const data = await response.json();
 

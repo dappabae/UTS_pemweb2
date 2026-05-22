@@ -7,7 +7,7 @@ export default function PembicaraIndex() {
 
   const handleDelete = async (id: number) => {
   try {
-    await fetch(`http://localhost:3000/pembicara/${id}`, {
+    await fetch(`https://back-end-converse-jkmq.vercel.app/pembicara/${id}`, {
       method: "DELETE",
     });
 
@@ -20,7 +20,7 @@ export default function PembicaraIndex() {
   useEffect(() => {
     const fetchPembicara = async () => {
       try {
-        const response = await fetch("http://localhost:3000/pembicara");
+        const response = await fetch("https://back-end-converse-jkmq.vercel.app/pembicara");
 
         const data = await response.json();
 

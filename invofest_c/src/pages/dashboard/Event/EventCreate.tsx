@@ -34,7 +34,7 @@ export default function EventCreate() {
 
     try {
 
-      const response = await fetch("http://localhost:3000/event", {
+      const response = await fetch("https://back-end-converse-jkmq.vercel.app/event", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

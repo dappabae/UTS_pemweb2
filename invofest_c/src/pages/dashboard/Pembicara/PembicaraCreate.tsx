@@ -26,7 +26,7 @@ export default function PembicaraCreate() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/pembicara", {
+      const response = await fetch("https://back-end-converse-jkmq.vercel.app/pembicara", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
