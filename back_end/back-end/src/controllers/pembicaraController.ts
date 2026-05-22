@@ -11,12 +11,18 @@ export const getPembicara = async (req: Request, res: Response) => {
     });
 
     res.json(pembicara);
-  } catch (error) {
-    res.status(500).json({
-      message: "Gagal mengambil data pembicara",
-      error,
-    });
-  }
+  } catch (error: any) {
+  console.log(error);
+
+  res.status(500).json({
+    message: "Gagal mengambil data pembicara",
+    error: {
+      name: error.name,
+      message: error.message,
+      code: error.code,
+    },
+  });
+}
 };
 
 // 2. Menyimpan pembicara
