@@ -1,0 +1,77 @@
+import { useForm } from "react-hook-form";
+import { InputText } from "../components/ui/inputText";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod"
+import { Link, useNavigate } from "react-router-dom";
+
+
+import { useAuthStore } from "../store/useAuthStore";
+
+type FormData = {
+    email: string;
+    password: string;
+};
+
+const schema = z.object({
+    email: z.string().min(1, "Email harus diisi"),
+    password: z.string().min(8, "password minimal 8 karakter")
+})
+
+export default function LoginForm() {
+    const navigate = useNavigate();
+    const login = useAuthStore((state) => state.login);
+
+   const {
+    register,
+     handleSubmit,
+      formState: {errors},
+    } =useForm<FormData>({
+        resolver: zodResolver(schema),
+    });
+
+
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+        if(data.email == "DaffaAmriHizbullah@gmail.com" && data.password == "24090078") {
+            alert("Login Berhasil");
+
+
+            login(data.email);
+
+            // redirect Ke halaman Dashboard
+            navigate("/dashboard");
+        } else {
+            alert("Email atau Password Salah!");
+        }
+};
+
+    return <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <InputText 
+            label="Email" 
+            nama="email" 
+            register={register}
+            error={errors.email?.message}
+            />
+
+            <InputText 
+            label="Password" 
+            nama="password" 
+            register={register}
+            error={errors.password?.message}
+            />
+
+            <div>
+                <button 
+                type="submit"
+                className="border border-black px-4 py-2 rounded-md hover:bg-black hover:text-white transition"
+                >Login</button>
+            </div>
+
+            <div>
+                Belum Punya Akun?<Link to="/register">Daftar Disini</Link>
+            </div>
+        </form>
+    </div>
+}
