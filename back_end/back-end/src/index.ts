@@ -7,7 +7,6 @@ import productRoute from "./routes/productRoute.js";
 import pembicaraRoute from "./routes/pembicaraRoute.js";
 
 const app = express();
-const port = 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +20,10 @@ app.use("/category", categoryRoute);
 app.use("/product", productRoute);
 app.use("/pembicara", pembicaraRoute);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(3000, () => {
+    console.log("Server is running on http://localhost:3000");
+  });
+}
+
+export default app;
