@@ -4,7 +4,9 @@ import cors from "cors";
 import eventRoute from "./routes/eventRoute.js";
 import categoryRoute from "./routes/categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
-import pembicaraRoute from "./routes/pembicaraRoute.js";
+import pembicara from "./routes/pembicaraRoute.js";
+import authRoute from "./routes/authRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 const app = express();
 
@@ -18,7 +20,9 @@ app.get("/", (req, res) => {
 app.use("/event", eventRoute);
 app.use("/category", categoryRoute);
 app.use("/product", productRoute);
-app.use("/pembicara", pembicaraRoute);
+app.use("/pembicara", pembicara);
+app.use("/auth", authRoute);
+app.use("/user", userRoute);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(3000, () => {

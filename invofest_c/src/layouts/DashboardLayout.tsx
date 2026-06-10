@@ -75,6 +75,15 @@ export default function DashboardLayout() {
                 Biodata
               </Link>
             </li>
+
+            <li>
+              <Link
+                to="/dashboard/user"
+                className="block w-full p-4 rounded-2xl bg-amber-800 hover:bg-white hover:text-black transition font-medium shadow-sm"
+              >
+                User
+              </Link>
+            </li>
           </ul>
         </div>
 
