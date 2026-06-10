@@ -26,7 +26,7 @@ export default function UserCreate() {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://back-end-converse-jkmq.vercel.app/user", {
+      const response = await fetch("http://localhost:3000/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

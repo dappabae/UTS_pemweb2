@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { prisma } from "../lib/db.js";
 
 // 1. Menampilkan semua user
@@ -8,16 +9,20 @@ export const getUser = async (req: Request, res: Response) => {
       orderBy: {
         createdAt: "desc",
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        foto: true,
+        createdAt: true,
+      },
     });
 
-    res.json(users);
+    return res.json(users);
   } catch (error: any) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Gagal mengambil data user",
-      errorName: error?.name,
-      errorCode: error?.code,
-      errorMessage: error?.message,
-      databaseUrlAda: !!process.env.DATABASE_URL,
+      error: error.message,
     });
   }
 };
@@ -27,29 +32,46 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, foto } = req.body;
 
-    if (!name || !email || !password || !foto) {
+    if (!name || !email || !password) {
       return res.status(400).json({
-        message: "Semua field wajib diisi",
+        message: "Name, email, dan password wajib diisi",
       });
     }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email sudah digunakan",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password,
-        foto,
+        password: hashedPassword,
+        foto: foto || "",
       },
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User berhasil ditambahkan",
-      user: newUser,
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        foto: newUser.foto,
+      },
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (error: any) {
+    return res.status(500).json({
       message: "Gagal menambahkan user",
-      error,
+      error: error.message,
     });
   }
 };
@@ -63,6 +85,13 @@ export const showUser = async (req: Request, res: Response) => {
       where: {
         id: Number(id),
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        foto: true,
+        createdAt: true,
+      },
     });
 
     if (!user) {
@@ -71,11 +100,11 @@ export const showUser = async (req: Request, res: Response) => {
       });
     }
 
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({
+    return res.json(user);
+  } catch (error: any) {
+    return res.status(500).json({
       message: "Gagal mengambil detail user",
-      error,
+      error: error.message,
     });
   }
 };
@@ -86,26 +115,36 @@ export const updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, email, password, foto } = req.body;
 
+    const dataUpdate: any = {
+      name,
+      email,
+      foto,
+    };
+
+    if (password) {
+      dataUpdate.password = await bcrypt.hash(password, 10);
+    }
+
     const updatedUser = await prisma.user.update({
       where: {
         id: Number(id),
       },
-      data: {
-        name,
-        email,
-        password,
-        foto,
-      },
+      data: dataUpdate,
     });
 
-    res.json({
+    return res.json({
       message: "User berhasil diupdate",
-      user: updatedUser,
+      data: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        foto: updatedUser.foto,
+      },
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (error: any) {
+    return res.status(500).json({
       message: "Gagal mengupdate user",
-      error,
+      error: error.message,
     });
   }
 };
@@ -121,13 +160,13 @@ export const deleteUser = async (req: Request, res: Response) => {
       },
     });
 
-    res.json({
+    return res.json({
       message: "User berhasil dihapus",
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (error: any) {
+    return res.status(500).json({
       message: "Gagal menghapus user",
-      error,
+      error: error.message,
     });
   }
 };

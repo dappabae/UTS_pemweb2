@@ -6,7 +6,7 @@ export default function UserIndex() {
 
   const handleDelete = async (id: number) => {
     try {
-      await fetch(`https://back-end-converse-jkmq.vercel.app/user/${id}`, {
+      await fetch(`http://localhost:3000/user/${id}`, {
         method: "DELETE",
       });
 
@@ -20,7 +20,7 @@ export default function UserIndex() {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          "https://back-end-converse-jkmq.vercel.app/user"
+          "http://localhost:3000/user"
         );
 
         const data = await response.json();
